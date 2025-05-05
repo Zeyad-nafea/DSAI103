@@ -1,11 +1,11 @@
 streamlit
-numpy
+beautifulsoup4
+requests
+selenium
 pandas
 matplotlib
 networkx
-beautifulsoup4
-requests
-urllib3
-certifi
 seaborn
-selenium
+certifi
+urllib3
+html5lib
