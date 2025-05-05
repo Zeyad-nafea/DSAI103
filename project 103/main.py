@@ -14,7 +14,7 @@ st.markdown(
     "Here we use **Selenium WebDriver** to automate a browser session, scrape live search results "
     "from eBay based on user input, and extract dynamic data like titles, prices, and reviews."
 )
-st.page_link("pages/sel.py", label="Selenium", icon="📄")
+st.page_link("pages/sel.py", label="Selenium", icon="📄",disabled=True)
 
 st.markdown("### 🔑 API-based Data Collection with SerpAPI")
 st.markdown(
