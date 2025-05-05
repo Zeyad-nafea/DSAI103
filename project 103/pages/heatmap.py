@@ -10,44 +10,33 @@ import urllib3
 import certifi
 import math
 import seaborn as sns
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from mpl_toolkits.mplot3d import Axes3D  # 3D plotting
 
-st.subheader("🔥Heatmap: Price Comparison (BeautifulSoup, API, Selenium)")
-api_prices= st.session_state.get('api_prices', None)
-bu_prices= st.session_state.get('bu_prices', None)
-selenium_prices = st.session_state.get('selenium_prices', None)
-if api_prices and bu_prices : 
+st.subheader("🔥Heatmap: Price Comparison (BeautifulSoup & API only)")
+api_prices = st.session_state.get('api_prices', None)
+bu_prices = st.session_state.get('bu_prices', None)
+
+if api_prices and bu_prices:
     def kde_quartic(d, h):
         """
         Quartic Kernel function: returns intensity if distance <= h, else 0.
         """
         dn = d / h
         return (15/16) * (1 - dn**2)**2 if dn <= 1 else 0
+
     points = []
     for p in bu_prices:
         try:
             val = float(p.replace("$", "").replace(",", ""))
-            val = val if val<200 else 0
+            val = val if val < 200 else 0
             points.append((val, 0))
         except:
             pass
 
     for p in api_prices:
         if p is not None:
-            p = p if p<200 else 0
+            p = p if p < 200 else 0
             points.append((p, 1))
-
-    for p in selenium_prices:
-        try:
-            val = float(p.replace("$", "").replace(",", ""))
-            val = val if val<200 else 0
-            points.append((val, 2))
-        except:
-            pass
 
     if points:
         x = [pt[0] for pt in points] 
@@ -84,9 +73,9 @@ if api_prices and bu_prices :
         plt.colorbar(hm, label='Intensity')
         plt.xlabel("Price")
         
-        y_ticks = [0, 1, 2]
+        y_ticks = [0, 1]
         plt.ylabel("Scraping Method")
-        plt.yticks(y_ticks, ['BS', 'API', 'Selenium'])
+        plt.yticks(y_ticks, ['BS', 'API'])
         
         plt.title("KDE Heatmap: Price Distribution by Method")
         plt.legend(loc='upper right')
