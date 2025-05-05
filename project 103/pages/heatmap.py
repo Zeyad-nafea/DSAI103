@@ -20,7 +20,7 @@ st.subheader("🔥Heatmap: Price Comparison (BeautifulSoup, API, Selenium)")
 api_prices= st.session_state.get('api_prices', None)
 bu_prices= st.session_state.get('bu_prices', None)
 selenium_prices = st.session_state.get('selenium_prices', None)
-if api_prices and bu_prices and selenium_prices: 
+if api_prices and bu_prices : 
     def kde_quartic(d, h):
         """
         Quartic Kernel function: returns intensity if distance <= h, else 0.
