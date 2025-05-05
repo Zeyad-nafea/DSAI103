@@ -14,12 +14,26 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 st.subheader("🤖Scraping using Selenium")
 search_query = st.text_input("Enter what you want to search on eBay:")
+
 if search_query:
     search_url = f"https://www.ebay.com/sch/i.html?_nkw={search_query.replace(' ', '+')}&_sop=12"
-    driver = webdriver.Chrome()
+    
+    # Set up headless Chrome options
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+
+    # Start driver with webdriver-manager
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
     driver.get(search_url)
     try:
         WebDriverWait(driver, 10).until(
@@ -59,5 +73,6 @@ if search_query:
         )
     finally:
         driver.quit()
+    
     st.session_state.selenium_prices = selenium_prices
     st.session_state.s_data = s_data
