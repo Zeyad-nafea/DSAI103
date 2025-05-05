@@ -1,11 +1,5 @@
 import streamlit as st
 
-st.logo(
-    "zcLogo.svg",
-    size='large'
-    ,icon_image="zcLogo.svg"
-)
-
 st.title("🗂️ DSAI 103 Project")
 
 st.markdown("### 📘 Web Scraping using BeautifulSoup")
