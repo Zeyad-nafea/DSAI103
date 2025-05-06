@@ -90,4 +90,4 @@ else:
 
 else:
 st.write("Insufficient data to generate heatmap.")
-st.page\_link("main.py", label="🔙 Return to Main Page", icon="🏠") can you make the heatmap look  prettier
+st.page\_link("main.py", label="🔙 Return to Main Page", icon="🏠") 
