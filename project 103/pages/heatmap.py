@@ -87,3 +87,4 @@ if api_prices and bu_prices:
         st.write("Insufficient data to generate heatmap.")
 else:
     st.write("Insufficient data to generate heatmap.")
+st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
