@@ -37,3 +37,4 @@ if st.button("Fetch Products"):
 
         ax.set_title(f'3D Visualization of Products')
         st.pyplot(fig)
+        st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
