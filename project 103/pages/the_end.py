@@ -44,3 +44,4 @@ if selected is not None:
     st.markdown(f"You selected {sentiment_mapping[selected]} star(s).")
 
 st.success("Thanks again for exploring our project and hope you liked it! 😄")
+st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
