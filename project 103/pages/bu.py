@@ -43,3 +43,4 @@ st.download_button(
 )
 st.session_state.bu_prices = bu_prices
 st.session_state.scraped_data = scraped_data
+st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
