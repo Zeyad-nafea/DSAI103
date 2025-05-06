@@ -75,3 +75,4 @@ if search_q:
 st.session_state.api_prices = api_prices
 st.session_state.api_data = api_data 
 st.session_state.api_3d_data = api_3d_data
+st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
