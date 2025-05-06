@@ -101,7 +101,7 @@ if api_prices and bu_prices:
         df.fillna(df.mean(), inplace=True)
 
         fig2 = plt.figure(figsize=(12, 2))
-        sns.heatmap(df.T, cmap="coolwarm", annot=True, fmt=".1f", linewidths=0.5, cbar=True)
+        sns.heatmap(df.T, cmap="coolwarm", annot=False, fmt=".1f", linewidths=1, cbar=True)
         plt.title("🧱 Colored Block Heatmap: Price Comparison")
         st.pyplot(fig2)
         plt.clf()
