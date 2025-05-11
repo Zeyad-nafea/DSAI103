@@ -93,6 +93,7 @@ if G and G.number_of_nodes() > 0:
     st.write("🔝 Top 5 Most Connected Nodes:")
     for node, degree in top_nodes:
         st.markdown(f"- **{node}** with degree `{degree}`")
+st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
 
 communities = list(nx.connected_components(G))
 st.write(f"🌐 Detected **{len(communities)} communities** in the network.")
