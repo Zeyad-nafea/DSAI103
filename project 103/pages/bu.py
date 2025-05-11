@@ -1,67 +1,62 @@
 import streamlit as st
-from bs4 import BeautifulSoup
-import requests
 import pandas as pd
+from serpapi import GoogleSearch
 
 st.set_page_config(page_title="Walmart Scraper", layout="wide")
-st.subheader("🍵 Web Scraping with BeautifulSoup (Walmart)")
+st.subheader("🛒 Scraping Walmart with SerpAPI")
 
-# Input
+# Input for search query
 search_query = st.text_input("Enter what to search:")
 
+# Replace with your SerpAPI key
+API_KEY = "your_serpapi_key"  # Replace this with your SerpAPI key
+
 if search_query:
-    # Initialize lists for scraped data
-    scraped_data = []
-
-    # Create Walmart search URL
-    URL = f"https://www.walmart.com/search/?query={search_query.replace(' ', '%20')}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    # Setup SerpAPI parameters
+    params = {
+        "q": search_query,
+        "location": "United States",  # Optional: you can specify the location
+        "device": "desktop",  # Desktop results
+        "api_key": API_KEY,
+        "engine": "walmart",
+        "hl": "en",
     }
-    r = requests.get(URL, headers=headers)
-    soup = BeautifulSoup(r.content, 'html.parser')
 
-    # Find product items on the page
-    items = soup.find_all("div", class_="search-result-gridview-item-wrapper")
+    # Call SerpAPI to get results
+    search = GoogleSearch(params)
+    results = search.get_dict()
 
-    # Extract product data
-    for item in items:
-        title_element = item.find("a", class_="product-title-link")
-        price_element = item.find("span", class_="price-main")
-        img_element = item.find("img", class_="search-result-productimage")
-        rating_element = item.find("span", class_="visuallyhidden")
-        
-        title = title_element.text.strip() if title_element else "No title"
-        price = price_element.text.strip() if price_element else "No price"
-        img_url = img_element['src'] if img_element else "No image"
-        rating = rating_element.text.strip() if rating_element else "No rating"
+    # Extract the product data
+    if 'products' in results:
+        scraped_data = []
+        for product in results['products']:
+            title = product.get("title", "No title available")
+            price = product.get("price", "No price available")
+            url = product.get("url", "No URL available")
+            image = product.get("image", "No image available")
+            scraped_data.append({
+                "title": title,
+                "price": price,
+                "URL": url,
+                "image": image
+            })
 
-        scraped_data.append({
-            "title": title,
-            "price": price,
-            "rating": rating,
-            "image": img_url
-        })
+        # Convert to DataFrame
+        df_scraped = pd.DataFrame(scraped_data)
 
-    # Convert to DataFrame
-    df_scraped = pd.DataFrame(scraped_data)
+        # Display the DataFrame in Streamlit
+        st.dataframe(df_scraped)
 
-    # Display Data
-    st.dataframe(df_scraped)
-
-    # CSV download
-    csv = df_scraped.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name="walmart_scraped_data.csv",
-        mime="text/csv",
-        icon=":material/download:"
-    )
-
-    # Store in session state
-    st.session_state.scraped_data = scraped_data
-
-    st.page_link("main.py", label="🔙 Return to Main Page", icon="🏠")
+        # CSV download
+        csv = df_scraped.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="Download CSV",
+            data=csv,
+            file_name="walmart_scraped_data.csv",
+            mime="text/csv",
+            icon=":material/download:"
+        )
+    else:
+        st.error("No products found or API error.")
 else:
-    st.info("Enter a search term above to begin scraping.")
+    st.info("Enter a search term to begin scraping.")
