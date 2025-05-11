@@ -23,7 +23,6 @@ if search_q:
             title_element = a.find('div', class_="s-item__title")
             price_element = a.find('div', class_="s-item__detail s-item__detail--primary")
             reviews_element = a.find('div', class_="s-item__reviews")
-            image_element = a.find('img', class_="s-item__image-img")
 
             title = title_element.text if title_element else "No title"
             price = price_element.text if price_element else None
@@ -33,13 +32,11 @@ if search_q:
                 if reviews_span:
                     reviews = reviews_span.text
 
-            image_url = image_element['src'] if image_element else None
 
             scraped_data.append({
                 "title": title,
                 "price": price,
                 "reviews": reviews,
-                "image_url": image_url,
                 "category": "watches"
             })
             bu_prices.append(price)
