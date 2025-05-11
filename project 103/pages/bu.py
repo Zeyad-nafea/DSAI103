@@ -16,18 +16,18 @@ if search_query:
     eBay_URL = f"https://www.ebay.com/sch/i.html?_nkw={search_query.replace(' ', '+')}&_sop=12"
     eBay_r = requests.get(eBay_URL, verify=False)
     eBay_soup = BeautifulSoup(eBay_r.content, 'html5lib')
-    eBay_items = eBay_soup.find_all("div", class_="s-item__wrapper clearfix")
+    eBay_items = eBay_soup.find_all("li", class_="s-item")
 
     for item in eBay_items:
-        a = item.find('div', class_="s-item__info clearfix")
         img_element = item.find('img', class_="s-item__image-img")
-        
-        if a:
-            title_element = a.find('div', class_="s-item__title")
-            price_element = a.find('div', class_="s-item__detail s-item__detail--primary")
+        a = item.find('div', class_="s-item__info")
 
-            title = title_element.text if title_element else "No title"
-            price = price_element.text if price_element else None
+        if a:
+            title_element = a.find('h3', class_="s-item__title")
+            price_element = a.find('span', class_="s-item__price")
+
+            title = title_element.text.strip() if title_element else "No title"
+            price = price_element.text.strip() if price_element else None
             image_url = img_element['src'] if img_element and 'src' in img_element.attrs else None
 
             scraped_data.append({
@@ -37,7 +37,7 @@ if search_query:
                 "category": "eBay"
             })
 
-    # Scrape Amazon
+    # Scrape Amazon (Note: might be blocked due to scraping prevention)
     amazon_URL = f"https://www.amazon.com/s?k={search_query.replace(' ', '+')}"
     amazon_r = requests.get(amazon_URL, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
     amazon_soup = BeautifulSoup(amazon_r.content, 'html5lib')
