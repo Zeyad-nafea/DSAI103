@@ -10,3 +10,4 @@ certifi
 urllib3
 html5lib
 webdriver-manager
+google-search-results
