@@ -9,7 +9,7 @@ r = requests.get(URL, verify=False)
 soup = BeautifulSoup(r.content, 'html5lib')
 items = soup.find_all("div", class_="s-item__wrapper clearfix")
 scraped_data = []
-for item in items:
+for item in items[2:]:
     a = item.find('div', class_="s-item__info clearfix")
     if a:
         title_element = a.find('div', class_="s-item__title")
