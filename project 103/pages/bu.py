@@ -25,22 +25,14 @@ if search_query:
         if a:
             title_element = a.find('div', class_="s-item__title")
             price_element = a.find('div', class_="s-item__detail s-item__detail--primary")
-            reviews_element = a.find('div', class_="s-item__reviews")
 
             title = title_element.text if title_element else "No title"
             price = price_element.text if price_element else None
-            reviews = "0"
-            if reviews_element:
-                reviews_span = reviews_element.find('span', class_="clipped")
-                if reviews_span:
-                    reviews = reviews_span.text
-
             image_url = img_element['src'] if img_element and 'src' in img_element.attrs else None
 
             scraped_data.append({
                 "title": title,
                 "price": price,
-                "reviews": reviews,
                 "image": image_url,
                 "category": "eBay"
             })
@@ -55,23 +47,20 @@ if search_query:
         img_element = item.find('img', class_="s-image")
         title_element = item.find('span', class_="a-text-normal")
         price_element = item.find('span', class_="a-price-whole")
-        reviews_element = item.find('span', class_="a-size-base")
 
         if title_element and price_element:
             title = title_element.text.strip() if title_element else "No title"
             price = price_element.text.strip() if price_element else None
-            reviews = reviews_element.text if reviews_element else "0"
             image_url = img_element['src'] if img_element and 'src' in img_element.attrs else None
 
             scraped_data.append({
                 "title": title,
                 "price": price,
-                "reviews": reviews,
                 "image": image_url,
                 "category": "Amazon"
             })
 
-    # Convert price/reviews to numeric for sorting
+    # Convert price to numeric for sorting
     def extract_numeric(text):
         if not text:
             return 0
@@ -83,18 +72,15 @@ if search_query:
 
     for product in scraped_data:
         product["numeric_price"] = extract_numeric(product["price"])
-        product["numeric_reviews"] = extract_numeric(product["reviews"])
 
-    # Add sorting options
-    sort_by = st.selectbox("Sort products by:", ["None", "Price (Low to High)", "Price (High to Low)", "Reviews (High to Low)"])
+    # Add sorting options for price
+    sort_by = st.selectbox("Sort products by:", ["None", "Price (Low to High)", "Price (High to Low)"])
 
     # Apply sorting
     if sort_by == "Price (Low to High)":
         scraped_data = sorted(scraped_data, key=lambda x: x["numeric_price"])
     elif sort_by == "Price (High to Low)":
         scraped_data = sorted(scraped_data, key=lambda x: x["numeric_price"], reverse=True)
-    elif sort_by == "Reviews (High to Low)":
-        scraped_data = sorted(scraped_data, key=lambda x: x["numeric_reviews"], reverse=True)
 
     # Convert to DataFrame
     df_scraped = pd.DataFrame(scraped_data)
@@ -111,7 +97,6 @@ if search_query:
             cols[1].markdown(f"""
                 **{row['title']}**  
                 💰 {row['price']}  
-                ⭐ {row['reviews']}  
                 🛒 Category: {row['category']}
             """)
             st.markdown("---")
