@@ -5,7 +5,7 @@ import pandas as pd
 bu_prices = []
 st.subheader("🍵Web Scraping by beutiful soup.")
 search_q = st.text_input("Enter what to search:")
-URL = "https://www.ebay.com/sch/i.html?_nkw=watches+for+men&_sop=12"
+URL = f"https://www.ebay.com/sch/i.html?_nkw={search_query.replace(' ', '+')}&_sop=12"
 r = requests.get(URL, verify=False)
 soup = BeautifulSoup(r.content, 'html5lib')
 items = soup.find_all("div", class_="s-item__wrapper clearfix")
